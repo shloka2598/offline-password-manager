@@ -6,8 +6,17 @@ int main() {
   int choice;
 
   while (true) {
-    std::cout << "\n--- Password Manager ---\n";
-    std::cout << "1. Sign Up\n2. Login\n3. Exit\nChoice: ";
+    std::cout << "\n=============================\n";
+    std::cout << "  OFFLINE PASSWORD MANAGER\n";
+    std::cout << "=============================\n";
+    std::cout << "1. Add new entry\n";
+    std::cout << "2. View entries\n";
+    std::cout << "3. Search entry\n";
+    std::cout << "4. Update entry\n";
+    std::cout << "5. Delete entry\n";
+    std::cout << "6. Logout\n";
+    std::cout << "=============================\n";
+    std::cout << "Choice: ";
     std::cin >> choice;
 
     switch (choice) {
