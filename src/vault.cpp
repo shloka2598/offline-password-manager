@@ -1,6 +1,8 @@
 #include "vault.h"
 #include "utils.h"
+#include <cstdio>
 #include <fstream>
+#include <iomanip>
 #include <iostream>
 #include <sstream>
 #include <string>
@@ -125,13 +127,16 @@ void searchEntry(const std::string &username) {
 
 void updateEntry(const std::string &username) {
   std::string keyword;
-  std::cout << "Enter site to update: ";
+  std::cout << "🔍 Enter site to update: ";
   std::cin >> keyword;
 
   std::ifstream file(vaultPath(username));
   std::ofstream temp("data/temp.db");
   std::string line;
   bool updated = false;
+
+  // Store updated values to show later
+  std::string updatedUname, updatedNotes;
 
   while (std::getline(file, line)) {
     std::stringstream ss(line);
@@ -142,15 +147,21 @@ void updateEntry(const std::string &username) {
     std::getline(ss, notes);
 
     if (site == keyword) {
-      std::cout << "Enter new username: ";
+      std::cout << "✏️  Enter new username: ";
       std::cin >> uname;
-      std::cout << "Enter new password: ";
+
+      std::cout << "🔐 Enter new password: ";
       std::cin >> encryptedPass;
+
       std::cin.ignore();
-      std::cout << "Enter new notes: ";
+      std::cout << "📝 Enter new notes: ";
       std::getline(std::cin, notes);
-      encryptedPass = hashPassword(encryptedPass); // encrypt again
+
+      encryptedPass = hashPassword(encryptedPass); // Encrypt new password
       updated = true;
+
+      updatedUname = uname;
+      updatedNotes = notes;
     }
 
     temp << site << "|" << uname << "|" << encryptedPass << "|" << notes << "\n";
@@ -161,10 +172,18 @@ void updateEntry(const std::string &username) {
   std::remove(vaultPath(username).c_str());
   std::rename("data/temp.db", vaultPath(username).c_str());
 
-  if (updated)
-    std::cout << "✅ Entry updated.\n";
-  else
-    std::cout << "❌ No entry found for: " << keyword << "\n";
+  if (updated) {
+    std::cout << "\n✅ Entry updated successfully:\n";
+    std::cout << "-----------------------------\n";
+    std::cout << std::left
+              << std::setw(12) << "Site:" << keyword << '\n'
+              << std::setw(12) << "Username:" << updatedUname << '\n'
+              << std::setw(12) << "Password:" << "[Encrypted]" << '\n'
+              << std::setw(12) << "Notes:" << updatedNotes << '\n';
+    std::cout << "-----------------------------\n";
+  } else {
+    std::cout << "\n❌ No entry found for: " << keyword << "\n";
+  }
 }
 
 void vaultMenu(const std::string &username) {
