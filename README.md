@@ -84,6 +84,7 @@ chmod +x build.sh
 ```
 
 ⚠️ Notes
+
 XOR encryption is used for simplicity (not secure in production)
 
 In future versions: switch to AES (Crypto++) + stronger password hashing (e.g., SHA-256 or bcrypt)
