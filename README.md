@@ -83,7 +83,7 @@ chmod +x build.sh
 ./build/password-manager
 ```
 
-⚠️ Notes
+### ⚠️ Notes
 
 XOR encryption is used for simplicity (not secure in production)
 
