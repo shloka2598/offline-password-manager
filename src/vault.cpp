@@ -36,12 +36,20 @@ void viewEntries(const std::string &username) {
   std::ifstream file(vaultPath(username));
   std::string line;
 
-  if (!file.is_open()) {
-    std::cout << "No entries found.\n";
+  if (!file.is_open() || file.peek() == std::ifstream::traits_type::eof()) {
+    std::cout << "\n📂 No entries found.\n";
     return;
   }
 
-  std::cout << "\n--- Saved Entries ---\n";
+  std::cout << "\n📁 Saved Entries:\n";
+  std::cout << "-------------------------------------------------------------------------------\n";
+  std::cout << std::left
+            << std::setw(20) << "Site"
+            << std::setw(20) << "Username"
+            << std::setw(20) << "Password"
+            << std::setw(30) << "Notes" << '\n';
+  std::cout << "-------------------------------------------------------------------------------\n";
+
   while (std::getline(file, line)) {
     std::stringstream ss(line);
     std::string site, uname, encryptedPass, notes;
@@ -52,12 +60,14 @@ void viewEntries(const std::string &username) {
 
     std::string decrypted = hashPassword(encryptedPass); // XOR decrypt
 
-    std::cout << "Site: " << site << "\n"
-              << "Username: " << uname << "\n"
-              << "Password: " << decrypted << "\n"
-              << "Notes: " << notes << "\n"
-              << "-----------------------------\n";
+    std::cout << std::left
+              << std::setw(20) << site
+              << std::setw(20) << uname
+              << std::setw(20) << decrypted
+              << std::setw(30) << notes << '\n';
   }
+
+  std::cout << "-------------------------------------------------------------------------------\n";
 }
 
 void deleteEntry(const std::string &username) {
